@@ -45,7 +45,7 @@ At this point, I will assume that your bootloader is unlocked.
 5) You have successfully rooted your device!
 
 # Acknowledgements
-Magisk (https://github.com/topjohnwu/magisk)
-SPFlashtool (https://spflashtool.com)
+- Magisk (https://github.com/topjohnwu/magisk)
+- SPFlashtool (https://spflashtool.com)
 
 
