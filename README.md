@@ -1,50 +1,51 @@
 # AT-M120-Root-Files
 Definitely what you need to get ROOT in ALT Mive Style Folder
 
-# Partition Table
 
-| Partition | Start Offset | Next Offset | Length (Hex) | Length |
-|---|---:|---:|---:|---:|
-| preloader | `0x00000000` | `0x00000000` | `0x00000000` | 0 B |
-| pgpt | `0x00000000` | `0x00008000` | `0x00008000` | 32 KiB |
-| boot_para | `0x00008000` | `0x00108000` | `0x00100000` | 1 MiB |
-| recovery | `0x00108000` | `0x02108000` | `0x02000000` | 32 MiB |
-| para | `0x02108000` | `0x02188000` | `0x00080000` | 512 KiB |
-| expdb | `0x02188000` | `0x03588000` | `0x01400000` | 20 MiB |
-| vbmeta_system | `0x03588000` | `0x03D88000` | `0x00800000` | 8 MiB |
-| vbmeta_vendor | `0x03D88000` | `0x04588000` | `0x00800000` | 8 MiB |
-| frp | `0x04588000` | `0x04688000` | `0x00100000` | 1 MiB |
-| nvcfg | `0x04688000` | `0x06688000` | `0x02000000` | 32 MiB |
-| nvdata | `0x06688000` | `0x0A688000` | `0x04000000` | 64 MiB |
-| md_udc | `0x0A688000` | `0x0BD22000` | `0x0169A000` | 22.60 MiB |
-| metadata | `0x0BD22000` | `0x0DD22000` | `0x02000000` | 32 MiB |
-| protect1 | `0x0DD22000` | `0x0E522000` | `0x00800000` | 8 MiB |
-| protect2 | `0x0E522000` | `0x0F000000` | `0x00ADE000` | 10.87 MiB |
-| seccfg | `0x0F000000` | `0x0F800000` | `0x00800000` | 8 MiB |
-| persist | `0x0F800000` | `0x12800000` | `0x03000000` | 48 MiB |
-| sec1 | `0x12800000` | `0x12A00000` | `0x00200000` | 2 MiB |
-| proinfo | `0x12A00000` | `0x12D00000` | `0x00300000` | 3 MiB |
-| md1img | `0x12D00000` | `0x19100000` | `0x06400000` | 100 MiB |
-| spmfw | `0x19100000` | `0x19200000` | `0x00100000` | 1 MiB |
-| scp1 | `0x19200000` | `0x19300000` | `0x00100000` | 1 MiB |
-| scp2 | `0x19300000` | `0x19400000` | `0x00100000` | 1 MiB |
-| sspm_1 | `0x19400000` | `0x19500000` | `0x00100000` | 1 MiB |
-| sspm_2 | `0x19500000` | `0x19600000` | `0x00100000` | 1 MiB |
-| gz1 | `0x19600000` | `0x1A600000` | `0x01000000` | 16 MiB |
-| gz2 | `0x1A600000` | `0x1B600000` | `0x01000000` | 16 MiB |
-| nvram | `0x1B600000` | `0x1F600000` | `0x04000000` | 64 MiB |
-| lk | `0x1F600000` | `0x1F700000` | `0x00100000` | 1 MiB |
-| lk2 | `0x1F700000` | `0x1F800000` | `0x00100000` | 1 MiB |
-| boot | `0x1F800000` | `0x21800000` | `0x02000000` | 32 MiB |
-| vendor_boot | `0x21800000` | `0x25800000` | `0x04000000` | 64 MiB |
-| logo | `0x25800000` | `0x26000000` | `0x00800000` | 8 MiB |
-| dtbo | `0x26000000` | `0x26800000` | `0x00800000` | 8 MiB |
-| tee1 | `0x26800000` | `0x26D00000` | `0x00500000` | 5 MiB |
-| tee2 | `0x26D00000` | `0x27800000` | `0x00B00000` | 11 MiB |
-| super | `0x27800000` | `0xE7800000` | `0xB0000000` | 2.75 GiB |
-| vbmeta | `0xE7800000` | `0xE8000000` | `0x00800000` | 8 MiB |
-| cache | `0xE8000000` | `0xEF000000` | `0x07000000` | 112 MiB |
-| userdata | `0xEF000000` | — | — | Unknown |
-| otp | `0xFFFF01D8` | — | — | Special |
-| flashinfo | `0xFFFF0080` | — | — | Special |
-| sgpt | `0xFFFF0000` | — | — | Special |
+# Pre-requisites
+- Unlocked Bootloader
+    Make sure you have ADB and Fastboot Platform Tools
+    1) Enable Developer Options in Settings by pressing `Build Number` until it says "You are now a Developer!"
+    2) Navigate to Developer Options and enable OEM Unlocking
+    3) Connect your device to your PC and send the command `adb reboot bootloader`
+    4) After it boots to Flashboot mode, send the command `fastboot flashing unlock`
+    5) Boot as normal by typing `fastboot reboot`
+
+# HALT
+Before anything else, check whether you have the same build number as in the [release](https://github.com/Valdezin/AT-M120-Root-Files/releases/tag/AT-M120KY1208S)
+<img width="480" height="800" alt="image" src="https://github.com/user-attachments/assets/808e18f1-17de-42e1-b52d-1fbe9761a23e" />
+
+If they do not match, ***STOP***, at this point you **must get the boot.bin yourself**
+
+# How to get boot.bin yourself
+At this point, I will assume that your bootloader is unlocked.
+1) Download [SPFlashTool](https://spflashtool.com/download/)
+2) Extract and open SPFlashTool and go to `Readback` Tab
+3) Click add and double click the `Start Address`
+   <img width="1011" height="677" alt="image" src="https://github.com/user-attachments/assets/059667ad-596d-474f-9906-4ea7a3a4bdd2" />
+4) It will open File Explorer, name it however you like but for this I will name it `boot_sample.bin` (.bin is required)
+   <img width="252" height="90" alt="image" src="https://github.com/user-attachments/assets/1b2bcf84-dfc2-4732-bebe-9c9d305e2606" />
+5) Input `0x1F800000` as Start Address with the Length of `0x02000000` (32MB)
+   <img width="432" height="503" alt="image" src="https://github.com/user-attachments/assets/bc6aac56-013a-433e-ba3d-ba8ed4a8be42" />
+6) Click OK and Readback, make sure your phone is turned off
+7) Plug the phone in your PC, if you see this checkmark then you have successfully got your `boot.bin`
+   <img width="1017" height="622" alt="image" src="https://github.com/user-attachments/assets/03900963-c981-4826-97f3-fab6409a8eb2" />
+
+
+# Installation
+1) Go to [release](https://github.com/Valdezin/AT-M120-Root-Files/releases/tag/AT-M120KY1208S) and download the patched img that is the same as your build number
+2) Install using your pc via `fastboot flash boot.img` (or whatever the name is)
+3) You have successfully rooted your device!
+
+*IF YOU GOT BOOT.BIN YOURSELF*
+1) Copy the `boot.bin` to your phone
+2) Install Magisk and patch the `boot.bin`
+3) Copy the patched `boot.bin` to your pc
+4) Install using your pc via `fastboot flash boot.img` (or whatever the name is)
+5) You have successfully rooted your device!
+
+# Acknowledgements
+Magisk (https://github.com/topjohnwu/magisk)
+SPFlashtool (https://spflashtool.com)
+
+
